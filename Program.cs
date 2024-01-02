@@ -8,6 +8,7 @@ using AutoMapper;
 using Demo.DTOs;
 using Demo.Utilidades;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +82,17 @@ app.MapPost("/user/save", async (
     ) =>
 {
     var _usuario = _mapper.Map<Usuario>(modelo);
+    string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+    Match match = Regex.Match(_usuario.Email, pattern);
+
+    if (!match.Success)
+    {
+        return Results.NotFound(match.Groups[1].Value);
+    }
+    if (_usuario.Name.Length > 50)
+    {
+        return Results.NotFound();
+    }
     var _usuarioCreado = await _usuarioServicio.AddUsuario(_usuario);
 
     if (_usuarioCreado.Id != 0)
@@ -102,6 +114,17 @@ app.MapPut("/user/update/{id}", async (
 {
     var _encontrado = await _usuarioServicio.GetUsuario(id);
     if (_encontrado == null)
+    {
+        return Results.NotFound();
+    }
+    string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+    Match match = Regex.Match(_encontrado.Email, pattern);
+
+    if (!match.Success)
+    {
+        return Results.NotFound(match.Groups[0].Value);
+    }
+    if (_encontrado.Name.Length > 50)
     {
         return Results.NotFound();
     }
