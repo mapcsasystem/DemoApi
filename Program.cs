@@ -87,11 +87,11 @@ app.MapPost("/user/save", async (
 
     if (!match.Success)
     {
-        return Results.NotFound(match.Groups[1].Value);
+        return Results.NotFound("Error de email");
     }
-    if (_usuario.Name.Length > 50)
+    if (_usuario.Name.Length < 10 && _usuario.Name.Length > 50)
     {
-        return Results.NotFound();
+        return Results.NotFound("Error name mayor a 10 y menor a 50");
     }
     var _usuarioCreado = await _usuarioServicio.AddUsuario(_usuario);
 
@@ -122,16 +122,15 @@ app.MapPut("/user/update/{id}", async (
 
     if (!match.Success)
     {
-        return Results.NotFound(match.Groups[0].Value);
+        return Results.NotFound("Error de email");
     }
-    if (_encontrado.Name.Length > 50)
+    if (_encontrado.Name.Length<10 && _encontrado.Name.Length > 50)
     {
-        return Results.NotFound();
+        return Results.NotFound("Error name mayor a 10 y menor a 50");
     }
     var _usuario = _mapper.Map<Usuario>(modelo);
     _encontrado.Name = _usuario.Name;
     _encontrado.Email = _usuario.Email;
-    _encontrado.Password = _usuario.Password;
     _encontrado.Age = _usuario.Age;
 
     var respuesta = await _usuarioServicio.UpdateUsuario(_encontrado);

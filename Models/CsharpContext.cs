@@ -33,10 +33,7 @@ public partial class CsharpContext : DbContext
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("name");
-            entity.Property(e => e.Password)
-                .HasMaxLength(50)
-                .IsFixedLength()
-                .HasColumnName("password");
+           
         });
 
         OnModelCreatingPartial(modelBuilder);
