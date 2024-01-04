@@ -7,9 +7,9 @@ namespace Demo.Utilidades
 {
     public class AutoMapperProfile:Profile
     {
-        public AutoMapperProfile() { 
+        public AutoMapperProfile() {
         #region Usuario
-        CreateMap<Usuario,UsuarioDTO>().ReverseMap();
+         CreateMap<Usuario, UsuarioDTO>().ReverseMap();
         #endregion
         }
     }
